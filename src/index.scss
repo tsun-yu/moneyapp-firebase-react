@@ -1,0 +1,35 @@
+:root {
+  --bg-primary: #fff;
+  --bg-secondary: #f6f8fc;
+  --container-bg: #f3f6fc;
+  // --btn-primary: #0b57d0;
+  --btn-primary: #c4eed0;
+  --btn-secondary: #c2e7ff;
+  --btn-secondary-active: #baddf5;
+  --link-hover: rgba(32, 33, 36, 0.059);
+  --input-secondary: #eaf1fb;
+  --input-border-focus: #4285f4;
+  --inputs-bg: #edf2fa;
+}
+
+@font-face {
+  font-family: "Google Sans";
+  src: url('./assets/fonts/ProductSans-Regular.ttf');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Google Sans";
+}
+
+body {
+  background-color: var(--bg-secondary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+}

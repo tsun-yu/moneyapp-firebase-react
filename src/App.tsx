@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { RouterProvider } from "react-router-dom";
+import router from "src/router";
+import "./App.scss";
+import Header from "./components/common/Header";
+import Sidebar from "./components/common/Sidebar";
+import styled from "styled-components";
+import { useState } from "react";
+import classNames from "classnames";
+
+const Body = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 4rem auto;
+  grid-template-columns: 4.875rem auto;
+  transition: 0.3s ease-in;
+  overflow: hidden;
+  padding: 0 2rem 2rem 0.75rem;
+
+  grid-template-areas:
+    "header header"
+    "aside main ";
+
+  &.expand {
+    grid-template-columns: 16rem auto;
+  }
+`;
 
 function App() {
+  const [isChecked, setIsChecked] = useState(false);
+  const gridClass = classNames({ expand: isChecked });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Body className={gridClass}>
+      <Header isChecked={isChecked} setIsChecked={setIsChecked} />
+      <Sidebar />
+      <RouterProvider router={router} />
+    </Body>
   );
 }
 
