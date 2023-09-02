@@ -29,10 +29,8 @@ const ErrorElement = styled.div`
 
 const ErrorPage = () => {
   const error: any = useRouteError();
-  console.error(error);
   const errorStatus: number = error.status;
   const errorStatusText: string = error.statusText;
-  console.log(typeof errorStatus);
 
   return (
     <Container id="error-page">
