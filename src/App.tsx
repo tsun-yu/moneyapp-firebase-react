@@ -11,7 +11,7 @@ const Body = styled.div`
   width: 100%;
   height: 100vh;
   display: grid;
-  grid-template-rows: 4rem auto;
+  grid-template-rows: 4rem calc(100% - 4rem);
   grid-template-columns: 4.875rem auto;
   transition: 0.3s ease-in;
   overflow: hidden;

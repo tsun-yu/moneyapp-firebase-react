@@ -1,9 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../util/firebase";
+import {
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { auth, db } from "../util/firebase";
 import { BiAddToQueue } from "react-icons/bi";
+import Item from "../components/home/Item";
+interface ItemsType {
+  item: string;
+  dollar: number;
+  date: string;
+}
 
 const Main = styled.main`
   width: 100%;
@@ -72,6 +86,12 @@ const Container = styled.div`
   flex: 1 1;
   background-color: #fff;
   border-radius: 1.5rem;
+  padding: 1rem;
+  overflow: auto;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  grid-auto-rows: min-content;
 `;
 
 function Home() {
@@ -83,31 +103,72 @@ function Home() {
       }
     });
   };
-  checkSignedStatus();
+  const [items, setItems] = useState<Array<ItemsType>>([]);
+  const [itemName, setItemName] = useState("");
+  const [dollar, setDollar] = useState("");
 
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("admin1234");
-  const handleEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setEmail(event.target.value);
+  checkSignedStatus();
+  useEffect(() => {
+    getData();
+    // postData();
+    // updateData();
+    // deleteData();
+  }, []);
+  const getData = async () => {
+    const querySnapshot = await getDocs(collection(db, "account"));
+    const data = querySnapshot.docs.map((doc) =>
+      doc.data()
+    ) as Array<ItemsType>;
+    setItems(data);
   };
-  const handlePasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setPassword(event.target.value);
+
+  const postData = async () => {
+    await setDoc(doc(collection(db, "account")), {
+      dollar,
+      item: itemName,
+      date: "2022/02/12",
+    });
+    await getData();
   };
-  const handleLoginClick = () => {};
+
+  const handleItemNameChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setItemName(event.target.value);
+  };
+  const handleDollarChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setDollar(event.target.value);
+  };
 
   return (
     <Main>
-      <Container></Container>
+      <Container>
+        {items.map((v, i) => {
+          const monDay = `${v.date.split("/")[1]}/${v.date.split("/")[2]}`;
+          return (
+            <Item
+              item={v.item}
+              dollar={v.dollar}
+              date={monDay}
+              key={v.date + v.item}
+            />
+          );
+        })}
+      </Container>
       <div className="input__container">
-        {/* <label htmlFor="expenseItem">Item:</label> */}
-        <input type="text" id="expenseItem" placeholder="Item" />
-        {/* <label htmlFor="expenseDollar">Dollar:</label> */}
-        <input type="text" id="expenseDollar" placeholder="Dollars" />
-        <button>
+        <input
+          type="text"
+          id="expenseItem"
+          placeholder="Item"
+          onChange={handleItemNameChange}
+          value={itemName}
+        />
+        <input
+          type="text"
+          id="expenseDollar"
+          placeholder="Dollars"
+          onChange={handleDollarChange}
+          value={dollar}
+        />
+        <button onClick={postData}>
           <BiAddToQueue />
         </button>
       </div>
