@@ -157,7 +157,7 @@ function Home() {
       id: "",
     });
     const id = docRef.id;
-    var docRefWithId = doc(db, "account", id);
+    const docRefWithId = doc(db, "account", id);
     await updateDoc(docRefWithId, {
       id,
     });
