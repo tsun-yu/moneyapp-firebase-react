@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState, ChangeEvent, KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { onAuthStateChanged } from "firebase/auth";
@@ -9,14 +9,16 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
 import { auth, db } from "../util/firebase";
 import { BiAddToQueue } from "react-icons/bi";
 import Item from "../components/home/Item";
 interface ItemsType {
   item: string;
-  dollar: number;
+  dollar: string;
   date: string;
+  id: string;
 }
 
 const Main = styled.main`
@@ -106,49 +108,92 @@ function Home() {
   const [items, setItems] = useState<Array<ItemsType>>([]);
   const [itemName, setItemName] = useState("");
   const [dollar, setDollar] = useState("");
+  const [date, setDate] = useState("");
 
   checkSignedStatus();
+
   useEffect(() => {
+    const currTime = new Date();
+    const [currYr, currMon, currDate] = [
+      currTime.getFullYear(),
+      currTime.getMonth() + 1,
+      currTime.getDate(),
+    ];
+    const dateStr = `${currYr}/${currMon < 10 ? "0" + currMon : currMon}/${
+      currDate < 10 ? "0" + currDate : currDate
+    }`;
+    setDate(dateStr);
     getData();
-    // postData();
-    // updateData();
-    // deleteData();
   }, []);
+
   const getData = async () => {
     const querySnapshot = await getDocs(collection(db, "account"));
-    const data = querySnapshot.docs.map((doc) =>
-      doc.data()
-    ) as Array<ItemsType>;
+    const data = querySnapshot.docs
+      .map((doc) => doc.data())
+      .sort((a, b) =>
+        a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+      ) as Array<ItemsType>;
+
     setItems(data);
   };
 
   const postData = async () => {
-    await setDoc(doc(collection(db, "account")), {
+    if (dollar === "" || itemName === "") return;
+    // await setDoc(doc(collection(db, "account")), {
+    //   dollar,
+    //   item: itemName,
+    //   date,
+    // });
+
+    // await setDoc(doc(db, "account", "account-3"), {
+    //   dollar,
+    //   item: itemName,
+    //   date,
+    // });
+    const docRef = await addDoc(collection(db, "account"), {
       dollar,
       item: itemName,
-      date: "2022/02/12",
+      date,
+      id: "",
     });
+    const id = docRef.id;
+    var docRefWithId = doc(db, "account", id);
+    await updateDoc(docRefWithId, {
+      id,
+    });
+
+    setItemName("");
+    setDollar("");
     await getData();
   };
-
   const handleItemNameChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setItemName(event.target.value);
   };
   const handleDollarChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    event.target.value = event.target.value
+      .replace(/[^0-9]/g, "")
+      .replace(/^0+/, "");
     setDollar(event.target.value);
+  };
+  const enterKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === "Enter") {
+      postData();
+    }
   };
 
   return (
     <Main>
       <Container>
-        {items.map((v, i) => {
+        {items.map((v) => {
           const monDay = `${v.date.split("/")[1]}/${v.date.split("/")[2]}`;
           return (
             <Item
               item={v.item}
               dollar={v.dollar}
               date={monDay}
-              key={v.date + v.item}
+              id={v.id}
+              key={v.id}
+              getData={getData}
             />
           );
         })}
@@ -160,6 +205,7 @@ function Home() {
           placeholder="Item"
           onChange={handleItemNameChange}
           value={itemName}
+          onKeyDown={enterKeyDown}
         />
         <input
           type="text"
@@ -167,6 +213,7 @@ function Home() {
           placeholder="Dollars"
           onChange={handleDollarChange}
           value={dollar}
+          onKeyDown={enterKeyDown}
         />
         <button onClick={postData}>
           <BiAddToQueue />
