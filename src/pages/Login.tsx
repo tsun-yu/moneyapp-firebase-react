@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { useNavigate, redirect } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -89,14 +89,10 @@ function Login() {
   const [password, setPassword] = useState("admin1234");
   const [isLogin, setIsLogin] = useState(true);
 
-  const handleEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
   };
-  const handlePasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setPassword(event.target.value);
   };
   const handleLoginClick = () => {
