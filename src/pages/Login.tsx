@@ -14,8 +14,7 @@ const Container = styled.div`
   background-color: var(--bg-secondary);
   /* width: 100vw; */
   height: 100vh;
-  display: grid;
-  place-items: center;
+  position: relative;
 `;
 const LoginElement = styled.div`
   /* background-color: var(--bg-secondary); */
@@ -23,6 +22,10 @@ const LoginElement = styled.div`
   border-radius: 1.5rem;
   width: min(90%, 400px);
   padding: 2rem 2rem 1rem;
+  position: absolute;
+  top: calc(50% - 4rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   h2 {
     font-size: 1.5rem;
@@ -64,7 +67,10 @@ function Login() {
       }
     });
   };
-  checkSignedStatus();
+
+  useEffect(() => {
+    checkSignedStatus();
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     try {

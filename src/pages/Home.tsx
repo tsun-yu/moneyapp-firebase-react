@@ -110,9 +110,8 @@ function Home() {
   const [dollar, setDollar] = useState("");
   const [date, setDate] = useState("");
 
-  checkSignedStatus();
-
   useEffect(() => {
+    checkSignedStatus();
     const currTime = new Date();
     const [currYr, currMon, currDate] = [
       currTime.getFullYear(),
