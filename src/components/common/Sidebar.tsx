@@ -42,19 +42,19 @@ function Sidebar() {
         <p>
           <SiReact />
         </p>
-        MoneyApp - React
+        FireBase - React
       </a>
       <a href="">
         <p>
           <SiVuedotjs />
         </p>
-        MoneyApp - Vue3
+        FireBase - Vue3
       </a>
       <a href="">
         <p>
           <SiSvelte />
         </p>
-        MoneyApp - Svelte
+        FireBase - Svelte
       </a>
     </Aside>
   );
