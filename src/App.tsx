@@ -11,8 +11,8 @@ const Body = styled.div`
   width: 100%;
   height: 100vh;
   display: grid;
-  grid-template-rows: 4rem calc(100% - 4rem);
-  grid-template-columns: 4.875rem auto;
+  grid-template-rows: 4rem minmax(0, 1fr);
+  grid-template-columns: 4.875rem minmax(0, 1fr);
   transition: 0.3s ease-in;
   overflow: hidden;
   padding: 0 2rem 2rem 0.75rem;
@@ -22,7 +22,7 @@ const Body = styled.div`
     "aside main ";
 
   &.expand {
-    grid-template-columns: 16rem auto;
+    grid-template-columns: 16rem minmax(0, 1fr);
   }
 `;
 

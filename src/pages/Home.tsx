@@ -30,6 +30,7 @@ const Main = styled.main`
   gap: 1rem;
 
   .input__container {
+    width: 100%;
     flex: 0 0 4rem;
     /* background-color: var(--inputs-bg); */
     background-color: var(--input-secondary);
@@ -49,6 +50,7 @@ const Main = styled.main`
       /* border-bottom: 0.125rem solid #ccc; */
       border: none;
       flex: 1 1;
+      width: 100%;
       border-radius: 1.5rem;
       outline: 0.125rem solid #ccc;
 
@@ -67,8 +69,8 @@ const Main = styled.main`
     }
 
     button {
+      flex: 0 0 2.75rem;
       height: 2.75rem;
-      width: 2.75rem;
       border: none;
       cursor: pointer;
       border-radius: 50%;
