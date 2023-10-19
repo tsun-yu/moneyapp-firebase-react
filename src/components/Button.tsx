@@ -14,6 +14,8 @@ const CustomButton = styled.button`
   padding: 1rem;
   cursor: pointer;
   font-size: 1.125rem;
+  font-weight: 600;
+  color: #001d35;
   transition: box-shadow 0.08s linear,
     min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
