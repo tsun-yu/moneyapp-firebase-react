@@ -48,13 +48,13 @@ function Sidebar() {
         <p>
           <SiVuedotjs />
         </p>
-        FireBase - Vue3
+        Vue3 (Coming soon)
       </a>
       <a href="">
         <p>
           <SiSvelte />
         </p>
-        FireBase - Svelte
+        Svelte (Coming soon)
       </a>
     </Aside>
   );
