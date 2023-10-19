@@ -1,62 +1,16 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
-import { useNavigate, redirect } from "react-router-dom";
+import classNames from "classnames";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  setPersistence,
-  signInWithEmailAndPassword,
-  browserSessionPersistence,
-  onAuthStateChanged,
-} from "firebase/auth";
+import LoginSection from "../components/loginPage/LoginSection";
 import { auth } from "../util/firebase";
-import Button from "../components/Button";
-
-const Container = styled.div`
-  background-color: var(--bg-secondary);
-  /* width: 100vw; */
-  height: 100vh;
-  position: relative;
-`;
-const LoginElement = styled.div`
-  /* background-color: var(--bg-secondary); */
-  background-color: #fff;
-  border-radius: 1.5rem;
-  width: min(90%, 400px);
-  padding: 2rem 2rem 1rem;
-  position: absolute;
-  top: calc(50% - 4rem);
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .login__input {
-    margin-bottom: 1rem;
-    font-size: 1.125rem;
-
-    label {
-      display: block;
-    }
-    input {
-      /* background-color: var(--bg-secondary); */
-      border: none;
-      border-bottom: 2px solid rgba(60, 64, 67, 0.08);
-      padding: 0.5rem 0.5rem 0.5rem 0;
-      width: 100%;
-      transition: 0.3s ease-in;
-      font-size: 1.125rem;
-    }
-
-    input:focus-visible {
-      outline: none;
-      border-bottom: 2px solid var(--input-secondary);
-    }
-  }
-`;
 
 function Login() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [hasMember, setHasMember] = useState(true);
+  const loginClass = classNames({ active: hasMember }, "switch__option");
+  const signupClass = classNames({ active: !hasMember }, "switch__option");
   const navigate = useNavigate();
   const checkSignedStatus = async () => {
     onAuthStateChanged(auth, (user) => {
@@ -72,75 +26,71 @@ function Login() {
     checkSignedStatus();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      // const user = userCredential.user;
-      // setIsAuth(auth.currentUser);
-      navigate("/");
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // errorCode === "auth/wrong-password"
-      //   ? alert("Wrong Password")
-      //   : alert(`${errorCode}: ${errorMessage}`);
-      // throw new Error(`${errorCode}: ${errorMessage}`);
-    }
-  };
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("admin1234");
-  const [isLogin, setIsLogin] = useState(true);
-
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
-  };
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setPassword(event.target.value);
-  };
-  const handleLoginClick = () => {
-    signIn(email, password);
+  const hasMemeberToggle = () => {
+    setHasMember((prev) => !prev);
   };
 
   return (
     <Container>
-      {!isLogin ? (
-        <LoginElement>
-          <h2>Login</h2>
-          <div className="login__input">
-            <input
-              type="email"
-              id="email"
-              placeholder="Email"
-              onChange={handleEmailChange}
-              value={email}
-            />
+      <div className="login">
+        <div className="switch">
+          <div className={loginClass} onClick={hasMemeberToggle}>
+            Log In
           </div>
-          <div className="login__input">
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              onChange={handlePasswordChange}
-              value={password}
-              onKeyUp={(e) => {
-                if (e.key === "Enter") handleLoginClick();
-              }}
-            />
+          <div className={signupClass} onClick={hasMemeberToggle}>
+            Sign Up
           </div>
-          <div className="login__input">
-            <Button label="LOGIN" onClick={handleLoginClick} />
-            {/* <button onClick={handleLoginClick}>LOGIN</button> */}
-          </div>
-        </LoginElement>
-      ) : (
-        <></>
-      )}
+        </div>
+        {hasMember ? (
+          <LoginSection label="Login" hasMember={hasMember} />
+        ) : (
+          <LoginSection label="Signup" hasMember={hasMember} />
+        )}
+      </div>
     </Container>
   );
 }
 
 export default Login;
+
+const Container = styled.div`
+  background-color: var(--bg-secondary);
+  /* width: 100vw; */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  .login {
+    width: min(100%, 400px);
+
+    .switch {
+      background-color: var(--input-secondary);
+      border-radius: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.625rem;
+      margin-bottom: 1rem;
+
+      .switch__option {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+
+        &.active {
+          background-color: var(--card-hover);
+          color: var(--color-primary);
+        }
+
+        &:hover:not(.active) {
+          background-color: #ffffff75;
+        }
+      }
+    }
+  }
+`;
