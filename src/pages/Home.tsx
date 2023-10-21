@@ -128,7 +128,7 @@ function Home() {
   }, []);
 
   const getData = async () => {
-    const querySnapshot = await getDocs(collection(db, "account"));
+    const querySnapshot = await getDocs(collection(db, "admin"));
     const data = querySnapshot.docs
       .map((doc) => doc.data())
       .sort((a, b) =>
@@ -140,25 +140,25 @@ function Home() {
 
   const postData = async () => {
     if (dollar === "" || itemName === "") return;
-    // await setDoc(doc(collection(db, "account")), {
+    // await setDoc(doc(collection(db, "admin")), {
     //   dollar,
     //   item: itemName,
     //   date,
     // });
 
-    // await setDoc(doc(db, "account", "account-3"), {
+    // await setDoc(doc(db, "admin", "admin-3"), {
     //   dollar,
     //   item: itemName,
     //   date,
     // });
-    const docRef = await addDoc(collection(db, "account"), {
+    const docRef = await addDoc(collection(db, "admin"), {
       dollar,
       item: itemName,
       date,
       id: "",
     });
     const id = docRef.id;
-    const docRefWithId = doc(db, "account", id);
+    const docRefWithId = doc(db, "admin", id);
     await updateDoc(docRefWithId, {
       id,
     });
