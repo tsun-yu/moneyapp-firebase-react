@@ -108,11 +108,11 @@ function Item(props: ItemProps) {
     console.log(itemInputRef);
   }, [isEdit]);
   const deleteData = async (id: string) => {
-    await deleteDoc(doc(db, "account", id));
+    await deleteDoc(doc(db, "admin", id));
     await getData();
   };
   const updateData = async (id: string) => {
-    const docRefWithId = doc(db, "account", id);
+    const docRefWithId = doc(db, "admin", id);
     await updateDoc(docRefWithId, {
       item: itemTemp,
       dollar: dollarTemp,
