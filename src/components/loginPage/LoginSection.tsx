@@ -137,7 +137,7 @@ function LoginSection(props: LoginSectionProps) {
           <></>
         )}
         <div className="login__input">
-          <Button label={label.toUpperCase()} onClick={handleLoginClick} />
+          <Button label={label} onClick={handleLoginClick} />
         </div>
       </LoginElement>
     </>

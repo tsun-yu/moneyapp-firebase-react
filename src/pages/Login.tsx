@@ -68,8 +68,6 @@ const Container = styled.div`
       border-radius: 2rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.25rem 0.625rem;
       margin-bottom: 1rem;
 
       .switch__option {
@@ -79,7 +77,7 @@ const Container = styled.div`
         font-size: 1.25rem;
         font-weight: 600;
         border-radius: 2rem;
-        padding: 0.5rem 1rem;
+        padding: 1rem;
         cursor: pointer;
 
         &.active {
@@ -88,7 +86,11 @@ const Container = styled.div`
         }
 
         &:hover:not(.active) {
-          background-color: #ffffff75;
+          background: linear-gradient(
+            0deg,
+            rgba(68, 71, 70, 0.08),
+            rgba(68, 71, 70, 0.08)
+          );
         }
       }
     }
